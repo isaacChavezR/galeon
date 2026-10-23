@@ -33,6 +33,9 @@ contextBridge.exposeInMainWorld('galeon', {
   // Ajustes cambiados (p. ej. tema) desde páginas internas
   onSettingsChanged: (cb) => ipcRenderer.on('settings:changed', (_e, settings) => cb(settings)),
 
+  // Modo desarrollador: ejecutar un userscript de prueba en la pestaña activa
+  onUsTestRun: (cb) => ipcRenderer.on('us:test-run', (_e, payload) => cb(payload)),
+
   // Ofertas: guardar contraseña / instalar userscript
   onPwdAsk: (cb) => ipcRenderer.on('pwd:ask', (_e, info) => cb(info)),
   pwdAnswer: (choice) => ipcRenderer.send('pwd:answer', choice),

@@ -2,76 +2,150 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Userscripts — Galeón</title>
+  <title>Extensiones — Galeón</title>
   <link rel="stylesheet" href="ajustes.css">
   <style>
+    .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+    .tabs button {
+      border: 1px solid rgba(255,255,255,.14); background: var(--navy-3); color: var(--ink-dim);
+      border-radius: 18px; padding: 7px 16px; font-size: 12.5px; cursor: pointer;
+    }
+    .tabs button.on { border-color: var(--gold); color: var(--gold); background: rgba(232,184,75,.1); }
+    .pane { display: none; }
+    .pane.on { display: block; }
+
     .script { padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
     .script:last-child { border-bottom: none; }
     .s-name { font-size: 14px; color: var(--ink); }
     .s-match { font-size: 11.5px; color: var(--ink-dim); font-family: Consolas, monospace; margin-top: 3px; word-break: break-all; }
-    .s-btns { display: flex; gap: 6px; margin-top: 7px; }
+    .s-btns { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
     .s-btns button {
       border: 1px solid rgba(255,255,255,.14); background: var(--navy-3); color: var(--ink);
       border-radius: 7px; padding: 4px 10px; font-size: 11.5px; cursor: pointer;
     }
     .s-btns button:hover { border-color: var(--gold); color: var(--gold); }
     .s-btns button.del { border-color: rgba(224,82,82,.4); color: #e05252; }
+    .s-btns button.probar { border-color: rgba(46,196,182,.5); color: var(--teal); }
     .s-off { opacity: .45; }
+
     textarea, input[type=text] {
       width: 100%; background: var(--navy); color: var(--ink);
       border: 1px solid rgba(255,255,255,.12); border-radius: 8px;
       padding: 8px 10px; font-size: 12.5px; font-family: Consolas, monospace;
-      outline: none; margin-top: 6px;
+      outline: none; margin-top: 6px; tab-size: 2;
     }
-    textarea { min-height: 140px; resize: vertical; }
+    textarea { min-height: 200px; resize: vertical; }
     label.fld { font-size: 11.5px; color: var(--teal); display: block; margin-top: 10px; }
+    .ok-note { color: var(--teal); font-size: 12px; min-height: 16px; margin-top: 8px; }
     .install-row { display: flex; gap: 8px; margin-top: 8px; }
     .install-row input { flex: 1; margin-top: 0; }
     .install-row button {
       border: 1px solid rgba(232,184,75,.4); background: rgba(232,184,75,.1); color: var(--gold);
-      border-radius: 8px; padding: 6px 14px; font-size: 12.5px; cursor: pointer;
+      border-radius: 8px; padding: 6px 14px; font-size: 12.5px; cursor: pointer; white-space: nowrap;
     }
-    .ok-note { color: var(--teal); font-size: 12px; min-height: 16px; margin-top: 8px; }
+
+    .tienda-box { text-align: center; padding: 22px 10px; }
+    .tienda-box .grande { font-size: 40px; }
+    .tienda-box p { color: var(--ink-dim); font-size: 13px; max-width: 460px; margin: 10px auto; line-height: 1.5; }
+    .tienda-buscar { display: flex; gap: 8px; max-width: 480px; margin: 16px auto 0; }
+    .tienda-buscar input { flex: 1; margin-top: 0; }
+    .tienda-buscar button {
+      border: 1px solid rgba(232,184,75,.4); background: rgba(232,184,75,.1); color: var(--gold);
+      border-radius: 8px; padding: 7px 16px; font-size: 13px; cursor: pointer; white-space: nowrap;
+    }
+    .tienda-links { margin-top: 18px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .tienda-links button {
+      border: 1px solid rgba(255,255,255,.14); background: var(--navy-3); color: var(--ink);
+      border-radius: 16px; padding: 6px 14px; font-size: 12px; cursor: pointer;
+    }
+
+    .log { font-family: Consolas, monospace; font-size: 12px; padding: 6px 10px; border-bottom: 1px solid rgba(255,255,255,.05); display: flex; gap: 10px; }
+    .log .l-hora { color: var(--ink-dim); flex: none; }
+    .log .l-nivel { flex: none; font-weight: 700; }
+    .log .l-origen { color: var(--teal); flex: none; }
+    .log.error .l-nivel, .log.error .l-texto { color: #e05252; }
+    .log.warn .l-nivel { color: var(--gold); }
+    .log .l-texto { word-break: break-all; color: var(--ink); }
+    .consola-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .consola-head button {
+      border: 1px solid rgba(255,255,255,.14); background: var(--navy-3); color: var(--ink);
+      border-radius: 7px; padding: 4px 12px; font-size: 11.5px; cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <h1>Userscripts</h1>
-      <p class="sub">Las "extensiones" de Galeón: scripts de la comunidad que se ejecutan en los sitios que elijas. 100% locales, código siempre visible antes de instalar.</p>
+      <h1>Extensiones</h1>
+      <p class="sub">Userscripts con modo desarrollador: tienda, prueba en vivo y consola. Todo local y auditable.</p>
     </header>
 
-    <section>
-      <h2>Instalar desde URL</h2>
+    <div class="tabs">
+      <button id="tab-mios" class="on">⚙️ Mis scripts</button>
+      <button id="tab-tienda">🛒 Tienda</button>
+      <button id="tab-consola">🖥️ Consola</button>
+    </div>
+
+    <!-- ===== MIS SCRIPTS ===== -->
+    <section class="pane on" id="pane-mios">
       <div class="install-row">
-        <input type="text" id="us-url" placeholder="https://.../script.user.js (también funciona navegar al enlace)"/>
+        <input type="text" id="us-url" placeholder="Pega un enlace .user.js (Greasyfork, GitHub…) y pulsa Instalar"/>
         <button id="us-install">Instalar</button>
       </div>
       <p class="ok-note" id="us-note"></p>
-      <div class="row"><span><small>Miles de scripts en <strong>greasyfork.org</strong> (busca el enlace .user.js de cualquier script y pégalo aquí, o simplemente ábrelo en Galeón: se ofrecerá instalarlo).</small></span></div>
-    </section>
 
-    <section>
-      <h2>Tus scripts</h2>
       <div id="list"></div>
-    </section>
 
-    <section>
-      <h2>Escribir / editar uno</h2>
-      <label class="fld">Nombre</label>
-      <input type="text" id="f-name" placeholder="Mi script"/>
-      <label class="fld">Aplica a (patrones @match, uno por línea)</label>
-      <textarea id="f-matches" style="min-height:60px" placeholder="https://*.ejemplo.com/*"></textarea>
-      <label class="fld">Código JavaScript</label>
-      <textarea id="f-code" placeholder="// ==UserScript==
+      <section>
+        <h2 style="font-size:13px;color:var(--teal);text-transform:uppercase;letter-spacing:.8px;margin-top:20px">Editor</h2>
+        <label class="fld">Nombre</label>
+        <input type="text" id="f-name" placeholder="Mi script"/>
+        <label class="fld">Aplica a (patrones @match, uno por línea)</label>
+        <textarea id="f-matches" style="min-height:60px" placeholder="https://*.ejemplo.com/*"></textarea>
+        <label class="fld">Código JavaScript <span id="f-stats" style="color:var(--ink-dim)"></span></label>
+        <textarea id="f-code" spellcheck="false" placeholder="// ==UserScript==
 // @name         Mi script
 // @match        https://*.ejemplo.com/*
 // ==/UserScript==
-console.log('¡Hola desde mi script!');"></textarea>
-      <div class="s-btns" style="margin-top:10px">
-        <button id="f-save" style="border-color: rgba(232,184,75,.5); color: var(--gold)">Guardar</button>
-        <button id="f-clear">Limpiar formulario</button>
+console.log('¡Hola!'); // se ve en la pestaña Consola"></textarea>
+        <div class="s-btns" style="margin-top:10px">
+          <button id="f-save" style="border-color: rgba(232,184,75,.5); color: var(--gold)">Guardar (Ctrl+S)</button>
+          <button id="f-test" class="probar">▶ Probar en la pestaña activa</button>
+          <button id="f-clear">Limpiar formulario</button>
+          <button id="f-export">Exportar todos (JSON)</button>
+          <button id="f-import">Importar…</button>
+          <input type="file" id="f-import-file" accept=".json" style="display:none"/>
+        </div>
+      </section>
+    </section>
+
+    <!-- ===== TIENDA ===== -->
+    <section class="pane" id="pane-tienda">
+      <div class="tienda-box">
+        <div class="grande">🛒</div>
+        <p><strong>Tienda: Greasyfork</strong>, el catálogo abierto de userscripts (miles gratis, sin cuenta).
+        Busca lo que quieras y, en la página del script, pulsa su botón de instalación:
+        <strong>Galeón lo intercepta y te ofrece instalarlo</strong> con el código siempre visible.</p>
+        <div class="tienda-buscar">
+          <input type="text" id="tienda-q" placeholder="Bloquear anuncios, modo oscuro, descargar video…"/>
+          <button id="tienda-buscar">Buscar</button>
+        </div>
+        <div class="tienda-links">
+          <button data-url="https://greasyfork.org/es">Explorar todo</button>
+          <button data-url="https://greasyfork.org/es/scripts?sort=total_installs">Más instalados</button>
+          <button data-url="https://openuserjs.org/">OpenUserJS (otra tienda)</button>
+        </div>
+        <p style="font-size:11.5px;margin-top:16px">Privacidad: la tienda se navega como cualquier web; Galeón no envía nada por ti.</p>
       </div>
+    </section>
+
+    <!-- ===== CONSOLA ===== -->
+    <section class="pane" id="pane-consola">
+      <div class="consola-head">
+        <span style="font-size:12.5px;color:var(--ink-dim)">console.log / warn / error de tus scripts, en vivo</span>
+        <button id="consola-clear">Limpiar</button>
+      </div>
+      <div id="consola-list"></div>
     </section>
   </div>
   <script src="userscripts.js"></script>

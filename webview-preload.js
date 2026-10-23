@@ -38,6 +38,13 @@ contextBridge.exposeInMainWorld('galeonPage', {
   dlList: () => ipcRenderer.invoke('dl:list'),
   dlShow: (ruta) => ipcRenderer.invoke('dl:show', ruta),
 
+  // Para galeon://userscripts (modo desarrollador)
+  usTest: (payload) => ipcRenderer.invoke('us:test-relay', payload),
+  usLogsGet: () => ipcRenderer.invoke('us:logs:get'),
+  usLogsClear: () => ipcRenderer.invoke('us:logs:clear'),
+  usExport: () => ipcRenderer.invoke('us:export'),
+  usImport: (texto) => ipcRenderer.invoke('us:import', texto),
+
   // Favicons locales de primera parte (para el dial de la home)
   getFavicon: (host) => ipcRenderer.invoke('favicon:get', host)
 });
@@ -48,10 +55,26 @@ contextBridge.exposeInMainWorld('galeonPage', {
 ---------------------------------------------------------------- */
 
 // --- Userscripts: pedir los que aplican a esta URL e inyectarlos en el mundo de la página ---
-function injectScript(code, runAt) {
+// Cada script se envuelve con un shim de desarrollador: sus console.* y errores
+// viajan al panel Consola de galeon://userscripts.
+const SHIM = `(function(){
+  const enviar = (nivel, args) => {
+    try { window.postMessage({ __galeonUS: 1, nivel, texto: args.map(a => {
+      try { return typeof a === 'object' ? JSON.stringify(a) : String(a); } catch (e) { return String(a); }
+    }).join(' ') }, '*'); } catch (e) {}
+  };
+  for (const nivel of ['log', 'warn', 'error', 'info']) {
+    const original = console[nivel] ? console[nivel].bind(console) : () => {};
+    console[nivel] = (...args) => { original(...args); enviar(nivel, args); };
+  }
+  window.addEventListener('error', (e) => enviar('error', [e.message + ' (' + (e.filename||'') + ':' + e.lineno + ')']));
+})();`;
+
+function injectScript(code, runAt, nombre) {
   const poner = () => {
     const s = document.createElement('script');
-    s.textContent = code;
+    s.textContent = SHIM + '\ntry { window.__galeonScriptNombre = ' + JSON.stringify(nombre || 'script') + '; } catch(e){}\n' +
+      '(function(){ const __galeonNombre = ' + JSON.stringify(nombre || 'script') + '; try {\n' + code + '\n} catch (e) { try { window.postMessage({ __galeonUS: 1, nivel: \'error\', texto: __galeonNombre + \': \' + (e && e.message) }, \'*\'); } catch (_e2) {} } })();';
     (document.head || document.documentElement).appendChild(s);
     s.remove();
   };
@@ -64,9 +87,20 @@ function injectScript(code, runAt) {
 ipcRenderer.invoke('us:for', location.href).then((scripts) => {
   if (!Array.isArray(scripts)) return;
   for (const s of scripts) {
-    try { injectScript(s.code, s.runAt); } catch (e) { console.warn('userscript error', e); }
+    try { injectScript(s.code, s.runAt, s.nombre); } catch (e) { console.warn('userscript error', e); }
   }
 }).catch(() => {});
+
+// Relay de los mensajes del shim hacia el proceso principal (rate limitado)
+let ultimoRelay = 0;
+window.addEventListener('message', (ev) => {
+  const d = ev.data;
+  if (!d || d.__galeonUS !== 1) return;
+  const ahora = Date.now();
+  if (ahora - ultimoRelay < 100) return; // tormenta de logs: no ahogar el IPC
+  ultimoRelay = ahora;
+  try { ipcRenderer.send('us:log', { nivel: d.nivel, texto: String(d.texto || '').slice(0, 500), origen: location.hostname }); } catch {}
+});
 
 // --- Contraseñas: detectar formularios de login, ofrecer guardar y autollenar ---
 function initPasswordHelpers() {

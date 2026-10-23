@@ -635,7 +635,62 @@ ipcMain.handle('us:for', (e, url) => {
   return userscripts
     .filter(s => s.enabled !== false)
     .filter(s => (s.matches || []).length === 0 || s.matches.some(p => matchUrl(p, url)))
-    .map(s => ({ code: s.code, runAt: s.runAt || 'end' }));
+    .map(s => ({ code: s.code, runAt: s.runAt || 'end', nombre: s.name }));
+});
+
+// --- Modo desarrollador: consola de scripts, prueba en vivo, export/import ---
+const usLogs = [];
+ipcMain.on('us:log', (_e, entrada) => {
+  if (!entrada || typeof entrada.texto !== 'string') return;
+  usLogs.push({ ...entrada, ts: Date.now() });
+  while (usLogs.length > 300) usLogs.shift();
+});
+ipcMain.handle('us:logs:get', (e) => isInternalPage(e) ? [...usLogs].slice(-150).reverse() : []);
+ipcMain.handle('us:logs:clear', (e) => { if (isInternalPage(e)) usLogs.length = 0; return true; });
+
+// Prueba sin guardar: ejecuta el código del editor en la pestaña activa de la ventana enfocada
+ipcMain.handle('us:test-relay', (e, { code, nombre }) => {
+  if (!isInternalPage(e) || typeof code !== 'string' || code.length > 1024 * 1024) return false;
+  sendAll('us:test-run', { code, nombre: nombre || 'script de prueba' });
+  return true;
+});
+
+ipcMain.handle('us:export', (e) => {
+  if (!isInternalPage(e)) return null;
+  const data = JSON.stringify({ app: 'Galeón', tipo: 'userscripts', exportado: new Date().toISOString(), scripts: userscripts }, null, 2);
+  const dest = uniquePath(app.getPath('downloads'), 'galeon-userscripts.json');
+  fs.writeFileSync(dest, data);
+  liberarDescarga(dest);
+  sendAll('galeon:download', { name: path.basename(dest), path: dest, pct: 100, done: true, ok: true });
+  return dest;
+});
+
+ipcMain.handle('us:import', (e, texto) => {
+  if (!isInternalPage(e) || typeof texto !== 'string') return { ok: false, error: 'entrada inválida' };
+  try {
+    const data = JSON.parse(texto);
+    const llegan = Array.isArray(data) ? data : data.scripts;
+    if (!Array.isArray(llegan)) return { ok: false, error: 'no es una exportación de Galeón' };
+    let n = 0;
+    for (const s of llegan) {
+      if (!s || typeof s.code !== 'string') continue;
+      const meta = parseUserScript(s.code);
+      userscripts.push({
+        id: ++usSeq,
+        name: s.name || meta.name,
+        matches: (Array.isArray(s.matches) && s.matches.length) ? s.matches : meta.matches,
+        runAt: s.runAt || meta.runAt,
+        code: s.code,
+        enabled: s.enabled !== false,
+        ts: Date.now()
+      });
+      n++;
+    }
+    saveUserscripts();
+    return { ok: true, n };
+  } catch (err) {
+    return { ok: false, error: 'JSON inválido: ' + err.message };
+  }
 });
 
 ipcMain.handle('us:list', (e) => isInternalPage(e)

@@ -709,6 +709,24 @@ tsInput.addEventListener('keydown', (e) => {
   }
 });
 
+/* ---------- Modo desarrollador: probar userscripts en la pestaña activa ---------- */
+window.galeon.onUsTestRun(({ code, nombre }) => {
+  const tab = activeTab();
+  if (!tab || !tab.webview || !/^https?:/.test(tab.url)) return;
+  try {
+    tab.webview.webContents.executeJavaScript(
+      `(function(){ try {\n${code}\n} catch (e) { console.error('prueba: ' + (e && e.message)); } })();`,
+      false
+    ).catch(() => {});
+    askToast(
+      `<div class="t-name">▶ "${nombre}" ejecutado en ${hostOf(tab.url)}</div>
+       <div class="t-status">Sus console.log y errores están en galeon://userscripts → Consola</div>`,
+      [['Entendido', () => {}]],
+      8000
+    );
+  } catch (e) { /* pestaña no lista */ }
+});
+
 /* ---------- Escudo y botellas ---------- */
 const shieldEl = document.getElementById('shield');
 const shieldPop = document.getElementById('shield-pop');
