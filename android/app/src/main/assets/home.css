@@ -1,0 +1,175 @@
+/* Galeón — página de inicio */
+:root {
+  --navy: #0A1F3C;
+  --navy-2: #12294E;
+  --navy-3: #1A3563;
+  --ink: #F2E9D8;
+  --ink-dim: #A9B4C7;
+  --gold: #E8B84B;
+  --teal: #2EC4B6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(1100px 600px at 50% -10%, #16345f 0%, var(--navy) 60%),
+              linear-gradient(180deg, var(--navy) 0%, #071629 100%);
+  color: var(--ink);
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+#wrap {
+  width: min(720px, 92%);
+  padding: 40px 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ---- Hero ---- */
+.hero { text-align: center; }
+.logo { filter: drop-shadow(0 6px 18px rgba(232, 184, 75, .25)); }
+.hero h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 40px;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  margin-top: 8px;
+}
+.tagline { color: var(--ink-dim); font-size: 14.5px; margin-top: 6px; }
+
+/* ---- Buscador ---- */
+#search-form {
+  display: flex;
+  gap: 8px;
+  background: var(--navy-2);
+  border: 1px solid rgba(232, 184, 75, .25);
+  border-radius: 26px;
+  padding: 7px;
+}
+#search-form:focus-within { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(232, 184, 75, .12); }
+
+#search-box {
+  flex: 1;
+  border: none; outline: none; background: transparent;
+  color: var(--ink);
+  font-size: 16px;
+  padding: 8px 14px;
+}
+#search-box::placeholder { color: var(--ink-dim); }
+
+#engine {
+  border: none; outline: none; cursor: pointer;
+  background: var(--navy-3); color: var(--ink-dim);
+  border-radius: 18px; padding: 8px 10px; font-size: 12.5px;
+}
+
+/* ---- Dial de marcadores ---- */
+.dial-title { font-size: 13px; color: var(--ink-dim); margin-bottom: 10px; letter-spacing: .4px; }
+.dial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+}
+.dial-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  padding: 14px 6px 10px;
+  background: var(--navy-2);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+}
+.dial-tile:hover { border-color: rgba(232, 184, 75, .4); background: var(--navy-3); }
+.dial-tile .dt-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 16px; color: #0A1F3C;
+}
+.dial-tile .dt-label {
+  font-size: 11px; color: var(--ink-dim);
+  max-width: 88px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.dial-tile .dt-close {
+  position: absolute; top: 4px; right: 6px;
+  border: none; background: transparent; color: var(--ink-dim);
+  font-size: 10px; cursor: pointer; border-radius: 4px; padding: 2px 4px;
+  opacity: 0;
+}
+.dial-tile:hover .dt-close { opacity: 1; }
+.dial-tile .dt-close:hover { color: var(--ink); background: rgba(255,255,255,.12); }
+
+/* ---- Impacto ---- */
+.impact {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.stat {
+  background: var(--navy-2);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.stat .num { font-size: 22px; font-weight: 700; color: var(--teal); }
+.stat.main { grid-row: span 1; }
+.stat.main .num { font-size: 30px; color: var(--gold); }
+.stat .label { font-size: 11px; color: var(--ink-dim); line-height: 1.3; }
+
+/* ---- Proyecto ---- */
+.project {
+  background: var(--navy-2);
+  border: 1px solid rgba(46, 196, 182, .2);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+.project-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.project-head h2 { font-size: 14px; color: var(--ink); letter-spacing: .3px; }
+.demo-note { font-size: 10.5px; color: var(--ink-dim); }
+
+.project-body { display: flex; gap: 14px; margin-top: 12px; align-items: flex-start; }
+.project-art {
+  width: 56px; height: 56px; flex: none;
+  display: grid; place-items: center;
+  font-size: 28px;
+  background: linear-gradient(160deg, #10456b, #0d2f52);
+  border-radius: 14px;
+}
+.project-info h3 { font-size: 16px; color: var(--teal); }
+.p-coords { font-size: 11.5px; color: var(--ink-dim); margin-top: 2px; font-family: Consolas, monospace; }
+.p-desc { font-size: 12.5px; color: var(--ink-dim); margin-top: 6px; line-height: 1.45; }
+
+.project-picker { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.project-picker button {
+  border: 1px solid rgba(255,255,255,.14);
+  background: var(--navy-3);
+  color: var(--ink-dim);
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.project-picker button.selected {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(232, 184, 75, .1);
+}
+
+.privacy-line { margin-top: 12px; font-size: 11.5px; color: var(--ink-dim); }
+.privacy-line strong { color: var(--teal); }
+
+/* ---- Pie ---- */
+footer {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 7px;
+  font-size: 11.5px; color: var(--ink-dim);
+  border-top: 1px solid rgba(255,255,255,.07);
+  padding-top: 14px;
+}

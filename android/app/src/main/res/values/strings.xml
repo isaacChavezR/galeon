@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="navy">#0A1F3C</color>
+    <color name="navy2">#12294E</color>
+    <color name="navy3">#1A3563</color>
+    <color name="ink">#F2E9D8</color>
+    <color name="inkDim">#A9B4C7</color>
+    <color name="gold">#E8B84B</color>
+    <color name="teal">#2EC4B6</color>
+    <string name="app_name">Galeón</string>
+</resources>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Marca + pestañas -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="10dp" android:paddingEnd="6dp" android:paddingTop="4dp">
+
+        <TextView
+            android:id="@+id/brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚓ Galeón"
+            android:textColor="@color/gold"
+            android:textSize="15sp"
+            android:fontFamily="serif"
+            android:paddingStart="2dp" android:paddingEnd="10dp" android:paddingTop="6dp" android:paddingBottom="6dp" />
+
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/tabbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="4dp" />
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/newtab"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:text="＋"
+            android:textColor="@color/inkDim"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:background="?android:attr/selectableItemBackgroundBorderless" />
+    </LinearLayout>
+
+    <!-- Barra de herramientas -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/navy2"
+        android:paddingStart="6dp" android:paddingEnd="8dp" android:paddingTop="6dp" android:paddingBottom="6dp">
+
+        <TextView android:id="@+id/btn_back" style="@style/NavBtn" android:text="◀" />
+        <TextView android:id="@+id/btn_fwd" style="@style/NavBtn" android:text="▶" />
+        <TextView android:id="@+id/btn_reload" style="@style/NavBtn" android:text="⟳" />
+        <TextView android:id="@+id/btn_home" style="@style/NavBtn" android:text="⌂" />
+
+        <EditText
+            android:id="@+id/urlbar"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp" android:layout_marginEnd="6dp"
+            android:background="@drawable/urlbar_bg"
+            android:paddingStart="14dp" android:paddingEnd="14dp"
+            android:textSize="13sp"
+            android:textColor="@color/ink"
+            android:textColorHint="@color/inkDim"
+            android:hint="Busca con Galeón o escribe una dirección"
+            android:imeOptions="actionGo"
+            android:inputType="textUri"
+            android:singleLine="true" />
+
+        <TextView android:id="@+id/btn_star" style="@style/NavBtn" android:text="☆" />
+        <TextView android:id="@+id/btn_find" style="@style/NavBtn" android:text="🔍" />
+        <TextView android:id="@+id/btn_history" style="@style/NavBtn" android:text="🕘" />
+        <TextView android:id="@+id/btn_settings" style="@style/NavBtn" android:text="⚙️" />
+
+        <TextView
+            android:id="@+id/shield"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:paddingStart="9dp" android:paddingEnd="9dp"
+            android:text="🛡 0"
+            android:textSize="12sp"
+            android:textColor="@color/teal" />
+
+        <TextView
+            android:id="@+id/bottles"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:paddingStart="9dp" android:paddingEnd="9dp"
+            android:text="🍾 0"
+            android:textSize="12sp"
+            android:textColor="@color/gold" />
+    </LinearLayout>
+
+    <!-- Buscar en la página -->
+    <LinearLayout
+        android:id="@+id/findbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/navy2"
+        android:paddingStart="8dp" android:paddingEnd="8dp" android:paddingTop="4dp" android:paddingBottom="4dp"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/find_input"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:background="@drawable/urlbar_bg"
+            android:paddingStart="12dp" android:paddingEnd="12dp"
+            android:textSize="13sp"
+            android:textColor="@color/ink"
+            android:textColorHint="@color/inkDim"
+            android:hint="Buscar en la página"
+            android:imeOptions="actionGo"
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <TextView android:id="@+id/find_count" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="11sp" android:textColor="@color/inkDim" android:paddingStart="6dp" android:paddingEnd="6dp" />
+        <TextView android:id="@+id/find_prev" style="@style/NavBtn" android:text="▲" />
+        <TextView android:id="@+id/find_next" style="@style/NavBtn" android:text="▼" />
+        <TextView android:id="@+id/find_close" style="@style/NavBtn" android:text="✕" />
+    </LinearLayout>
+
+    <!-- Contenido de las pestañas -->
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
