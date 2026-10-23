@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>No se pudo cargar — Galeón</title>
+  <link rel="stylesheet" href="ajustes.css">
+  <style>
+    .center { text-align: center; padding-top: 60px; }
+    .wave { font-size: 54px; }
+    h1 { font-family: Georgia, serif; color: var(--gold); font-size: 24px; margin-top: 14px; }
+    .url-fail { font-family: Consolas, monospace; color: var(--ink); font-size: 13px; margin-top: 8px; word-break: break-all; }
+    .desc { color: var(--ink-dim); font-size: 13.5px; margin-top: 12px; line-height: 1.6; max-width: 460px; margin-left: auto; margin-right: auto; }
+    .code { font-size: 11px; color: var(--teal); margin-top: 6px; }
+    .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 26px; flex-wrap: wrap; }
+    .btn-row button {
+      border: 1px solid rgba(255,255,255,.16); background: var(--navy-3); color: var(--ink);
+      border-radius: 10px; padding: 10px 20px; font-size: 13.5px; cursor: pointer;
+    }
+    .btn-row button.primary { background: var(--gold); color: #241a00; font-weight: 700; border-color: var(--gold); }
+    .btn-row button:hover { border-color: var(--gold); }
+  </style>
+</head>
+<body>
+  <div class="wrap center">
+    <div class="wave">🌊</div>
+    <h1>Este sitio no pudo cargarse</h1>
+    <div class="url-fail" id="fail-url">—</div>
+    <p class="desc" id="fail-desc">Revisa tu conexión o inténtalo de nuevo en unos segundos.</p>
+    <p class="code" id="fail-code"></p>
+    <div class="btn-row">
+      <button class="primary" id="btn-retry">Reintentar</button>
+      <button id="btn-http" hidden>Este sitio quizá no soporta HTTPS — abrir sin cifrado</button>
+      <button id="btn-home">Ir al inicio</button>
+    </div>
+  </div>
+  <script src="error.js"></script>
+</body>
+</html>

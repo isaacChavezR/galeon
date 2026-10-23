@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Userscripts — Galeón</title>
+  <link rel="stylesheet" href="ajustes.css">
+  <style>
+    .script { padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .script:last-child { border-bottom: none; }
+    .s-name { font-size: 14px; color: var(--ink); }
+    .s-match { font-size: 11.5px; color: var(--ink-dim); font-family: Consolas, monospace; margin-top: 3px; word-break: break-all; }
+    .s-btns { display: flex; gap: 6px; margin-top: 7px; }
+    .s-btns button {
+      border: 1px solid rgba(255,255,255,.14); background: var(--navy-3); color: var(--ink);
+      border-radius: 7px; padding: 4px 10px; font-size: 11.5px; cursor: pointer;
+    }
+    .s-btns button:hover { border-color: var(--gold); color: var(--gold); }
+    .s-btns button.del { border-color: rgba(224,82,82,.4); color: #e05252; }
+    .s-off { opacity: .45; }
+    textarea, input[type=text] {
+      width: 100%; background: var(--navy); color: var(--ink);
+      border: 1px solid rgba(255,255,255,.12); border-radius: 8px;
+      padding: 8px 10px; font-size: 12.5px; font-family: Consolas, monospace;
+      outline: none; margin-top: 6px;
+    }
+    textarea { min-height: 140px; resize: vertical; }
+    label.fld { font-size: 11.5px; color: var(--teal); display: block; margin-top: 10px; }
+    .install-row { display: flex; gap: 8px; margin-top: 8px; }
+    .install-row input { flex: 1; margin-top: 0; }
+    .install-row button {
+      border: 1px solid rgba(232,184,75,.4); background: rgba(232,184,75,.1); color: var(--gold);
+      border-radius: 8px; padding: 6px 14px; font-size: 12.5px; cursor: pointer;
+    }
+    .ok-note { color: var(--teal); font-size: 12px; min-height: 16px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Userscripts</h1>
+      <p class="sub">Las "extensiones" de Galeón: scripts de la comunidad que se ejecutan en los sitios que elijas. 100% locales, código siempre visible antes de instalar.</p>
+    </header>
+
+    <section>
+      <h2>Instalar desde URL</h2>
+      <div class="install-row">
+        <input type="text" id="us-url" placeholder="https://.../script.user.js (también funciona navegar al enlace)"/>
+        <button id="us-install">Instalar</button>
+      </div>
+      <p class="ok-note" id="us-note"></p>
+      <div class="row"><span><small>Miles de scripts en <strong>greasyfork.org</strong> (busca el enlace .user.js de cualquier script y pégalo aquí, o simplemente ábrelo en Galeón: se ofrecerá instalarlo).</small></span></div>
+    </section>
+
+    <section>
+      <h2>Tus scripts</h2>
+      <div id="list"></div>
+    </section>
+
+    <section>
+      <h2>Escribir / editar uno</h2>
+      <label class="fld">Nombre</label>
+      <input type="text" id="f-name" placeholder="Mi script"/>
+      <label class="fld">Aplica a (patrones @match, uno por línea)</label>
+      <textarea id="f-matches" style="min-height:60px" placeholder="https://*.ejemplo.com/*"></textarea>
+      <label class="fld">Código JavaScript</label>
+      <textarea id="f-code" placeholder="// ==UserScript==
+// @name         Mi script
+// @match        https://*.ejemplo.com/*
+// ==/UserScript==
+console.log('¡Hola desde mi script!');"></textarea>
+      <div class="s-btns" style="margin-top:10px">
+        <button id="f-save" style="border-color: rgba(232,184,75,.5); color: var(--gold)">Guardar</button>
+        <button id="f-clear">Limpiar formulario</button>
+      </div>
+    </section>
+  </div>
+  <script src="userscripts.js"></script>
+</body>
+</html>

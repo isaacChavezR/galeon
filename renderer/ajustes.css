@@ -1,0 +1,79 @@
+/* Galeón — página de ajustes */
+:root {
+  --navy: #0A1F3C; --navy-2: #12294E; --navy-3: #1A3563;
+  --ink: #F2E9D8; --ink-dim: #A9B4C7;
+  --gold: #E8B84B; --teal: #2EC4B6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--navy);
+  color: var(--ink);
+  padding: 28px 0 60px;
+}
+.wrap { width: min(680px, 92%); margin: 0 auto; }
+header h1 { font-family: Georgia, serif; color: var(--gold); font-size: 28px; }
+.sub { color: var(--ink-dim); font-size: 13px; margin-top: 4px; }
+
+section {
+  margin-top: 26px;
+  background: var(--navy-2);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  padding: 6px 18px 10px;
+}
+h2 { font-size: 13px; color: var(--teal); letter-spacing: .8px; text-transform: uppercase; padding: 12px 0 4px; }
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.row:last-child { border-bottom: none; }
+.row span { display: flex; flex-direction: column; gap: 3px; }
+.row strong { font-size: 14px; font-weight: 600; }
+.row small { font-size: 12px; color: var(--ink-dim); line-height: 1.4; }
+
+input[type="checkbox"] {
+  appearance: none;
+  width: 42px; height: 24px;
+  border-radius: 12px;
+  background: var(--navy-3);
+  position: relative;
+  cursor: pointer;
+  transition: background .15s;
+  flex: none;
+}
+input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--ink-dim);
+  transition: transform .15s, background .15s;
+}
+input[type="checkbox"]:checked { background: var(--teal); }
+input[type="checkbox"]:checked::after { transform: translateX(18px); background: #06231f; }
+
+.btns { display: flex; flex-direction: column; gap: 6px; flex: none; }
+.btns button, .chips button {
+  border: 1px solid rgba(255,255,255,.14);
+  background: var(--navy-3);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btns button:hover, .chips button:hover { border-color: var(--gold); color: var(--gold); }
+
+.row.exempt { flex-direction: column; align-items: stretch; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chips button { border-color: rgba(46,196,182,.4); color: var(--teal); }
+
+.stat-line { font-size: 13px; color: var(--gold); text-align: right; }

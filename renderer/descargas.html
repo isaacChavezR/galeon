@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Descargas — Galeón</title>
+  <link rel="stylesheet" href="ajustes.css">
+  <style>
+    .dl { padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .dl:last-child { border-bottom: none; }
+    .dl-name { font-size: 13.5px; color: var(--ink); word-break: break-all; }
+    .dl-meta { font-size: 11.5px; color: var(--ink-dim); margin-top: 3px; font-family: Consolas, monospace; word-break: break-all; }
+    .dl-btns { display: flex; gap: 6px; margin-top: 7px; }
+    .dl-btns button {
+      border: 1px solid rgba(255,255,255,.14); background: var(--navy-3); color: var(--ink);
+      border-radius: 7px; padding: 4px 10px; font-size: 11.5px; cursor: pointer;
+    }
+    .dl-btns button:hover { border-color: var(--gold); color: var(--gold); }
+    .dl.fallida .dl-name { color: #e05252; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Descargas</h1>
+      <p class="sub">Las últimas 100, guardadas solo en tu equipo. Los archivos están en tu carpeta de Descargas.</p>
+    </header>
+    <section>
+      <div id="list"></div>
+    </section>
+  </div>
+  <script src="descargas.js"></script>
+</body>
+</html>

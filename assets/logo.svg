@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Galeón: tesoro bien guardado, mares limpios -->
+  <symbol id="mark" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="30" fill="#0A1F3C" stroke="#E8B84B" stroke-width="2.5"/>
+    <!-- olas -->
+    <path d="M11 49q6-5 11 0t11 0t11 0t11 0" fill="none" stroke="#2EC4B6" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M17 54q5-4 9 0t10 0" fill="none" stroke="#1E8F84" stroke-width="2" stroke-linecap="round" opacity=".65"/>
+    <!-- mástil y bandera -->
+    <path d="M32 13v25" stroke="#E8B84B" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M32 10l8 2.6L32 15.2z" fill="#2EC4B6"/>
+    <!-- velas -->
+    <path d="M34 16q11 5.4 10 15.5L34 33z" fill="#F2E9D8"/>
+    <path d="M30 18q-10 4.6-9 13.6L30 32.6z" fill="#E8B84B"/>
+    <!-- casco -->
+    <path d="M15.5 37h33l-5.5 8.5q-11 3.2-22 0z" fill="#E8B84B"/>
+    <path d="M18.5 41h27" stroke="#B8860B" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+  </symbol>
+  <use href="#mark"/>
+</svg>

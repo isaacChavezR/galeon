@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagnóstico — Galeón</title>
+  <link rel="stylesheet" href="ajustes.css">
+  <style>
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+    .k { font-size: 11.5px; color: var(--ink-dim); }
+    .v { font-size: 13.5px; color: var(--ink); font-family: Consolas, monospace; word-break: break-all; }
+    .danger button { border-color: rgba(224, 82, 82, .5) !important; color: #e05252 !important; }
+    .danger button:hover { background: rgba(224, 82, 82, .12) !important; }
+    .ok-note { font-size: 12px; color: var(--teal); margin-top: 6px; min-height: 16px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Diagnóstico</h1>
+      <p class="sub">Panel interno de Galeón. Todo es local: esta página no existe en internet y no reporta nada a nadie.</p>
+    </header>
+
+    <section>
+      <h2>Versión</h2>
+      <div class="grid">
+        <div><div class="k">Galeón</div><div class="v" id="v-app">—</div></div>
+        <div><div class="k">Motor (Chromium)</div><div class="v" id="v-chrome">—</div></div>
+        <div><div class="k">Electron</div><div class="v" id="v-electron">—</div></div>
+        <div><div class="k">Node</div><div class="v" id="v-node">—</div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Escudo</h2>
+      <div class="grid">
+        <div><div class="k">Dominios en la lista</div><div class="v" id="s-count">—</div></div>
+        <div><div class="k">Lista actualizada</div><div class="v" id="s-updated">—</div></div>
+        <div><div class="k">Bloqueados (total)</div><div class="v" id="s-blocked">—</div></div>
+        <div><div class="k">Bloqueados (esta sesión)</div><div class="v" id="s-session">—</div></div>
+        <div><div class="k">Parámetros de rastreo limpiados de enlaces</div><div class="v" id="s-clean">—</div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Datos locales</h2>
+      <div class="grid">
+        <div><div class="k">Carpeta de datos</div><div class="v" id="d-user">—</div></div>
+        <div><div class="k">Descargas</div><div class="v" id="d-down">—</div></div>
+        <div><div class="k">Entradas de historial</div><div class="v" id="d-hist">—</div></div>
+        <div><div class="k">Marcadores</div><div class="v" id="d-bm">—</div></div>
+        <div><div class="k">Búsquedas</div><div class="v" id="d-search">—</div></div>
+        <div><div class="k">Botellas financiadas</div><div class="v" id="d-bottles">—</div></div>
+      </div>
+      <div class="row">
+        <span><strong>Exportar mis datos</strong><small>Historial, marcadores, estadísticas y ajustes en un único JSON en tu carpeta Descargas. Para respaldo o para llevártelos a otro equipo.</small></span>
+        <div class="btns"><button id="btn-export">Exportar JSON</button></div>
+      </div>
+      <p class="ok-note" id="export-note"></p>
+    </section>
+
+    <section class="danger">
+      <h2>Zona de riesgo</h2>
+      <div class="row">
+        <span><strong>Reiniciar Galeón por completo</strong><small>Borra historial, estadísticas, ajustes y sesión guardada, y restaura los marcadores de fábrica. No tiene vuelta atrás.</small></span>
+        <div class="btns"><button id="btn-reset">Borrar todo…</button></div>
+      </div>
+    </section>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html>

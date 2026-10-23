@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajustes — Galeón</title>
+  <link rel="stylesheet" href="ajustes.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Ajustes</h1>
+      <p class="sub">Todo se guarda solo en tu equipo. Versión <span id="version">—</span></p>
+    </header>
+
+    <section>
+      <h2>Privacidad</h2>
+      <label class="row">
+        <span><strong>Referer recortado</strong><small>Los sitios solo ven de qué web vienes, no la página exacta.</small></span>
+        <input type="checkbox" id="refererTrim"/>
+      </label>
+      <label class="row">
+        <span><strong>HTTPS siempre</strong><small>Los sitios http se cargan con cifrado https. Si un sitio no lo soporta, puede no cargar.</small></span>
+        <input type="checkbox" id="httpsOnly"/>
+      </label>
+      <label class="row">
+        <span><strong>Enviar Do-Not-Track y Sec-GPC</strong><small>Pide formalmente a los sitios que no te rastreen. Solo los decentes obedecen; el escudo cubre al resto.</small></span>
+        <input type="checkbox" id="sendDntGpc"/>
+      </label>
+      <label class="row">
+        <span><strong>Decir a los sitios que hablas español</strong><small>Los sitios te responden en español. Si lo apagas, Galeón se mezcla con la masa enviando un idioma neutro (más difícil de identificarte).</small></span>
+        <input type="checkbox" id="acceptLang"/>
+      </label>
+      <label class="row">
+        <span><strong>Escudo anti-rastreadores</strong><small>Bloqueo de los 102.000+ dominios de rastreo y publicidad.</small></span>
+        <input type="checkbox" id="shieldEnabled"/>
+      </label>
+      <div class="row exempt" id="exempt-row" hidden>
+        <span><strong>Escudo desactivado en:</strong><small>Haz clic para reactivar el escudo en cada sitio.</small></span>
+        <div class="chips" id="exempt-list"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Tus datos</h2>
+      <div class="row">
+        <span><strong>Historial, cookies y caché</strong><small>El historial y los datos de sitios viven solo aquí. Bórralos cuando quieras.</small></span>
+        <div class="btns">
+          <button id="btn-clear-history">Borrar historial</button>
+          <button id="btn-clear-cookies">Borrar cookies y datos de sitios</button>
+          <button id="btn-clear-cache">Borrar caché</button>
+        </div>
+      </div>
+      <div class="row stats">
+        <span><strong>Tu impacto acumulado</strong></span>
+        <div class="stat-line" id="stats-line">—</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Navegación</h2>
+      <label class="row">
+        <span><strong>Recuperar pestañas al abrir</strong><small>Galeón recuerda tus pestañas (solo en tu equipo) y las reabre.</small></span>
+        <input type="checkbox" id="restoreSession"/>
+      </label>
+      <label class="row">
+        <span><strong>Tema claro</strong><small>Galeón es azul noche por defecto; puedes vestirlo de papel.</small></span>
+        <input type="checkbox" id="theme"/>
+      </label>
+      <label class="row">
+        <span><strong>Dormir pestañas inactivas</strong><small>Tras 15 minutos sin usarlas, las pestañas liberan memoria (💤) y se recargan al volver. Como el "ahorrador" de los navegadores grandes.</small></span>
+        <input type="checkbox" id="sleepTabs"/>
+      </label>
+      <label class="row">
+        <span><strong>Borrar cookies y datos de sitios al salir</strong><small>Máxima higiene: al cerrar Galeón no queda rastro de sesiones. Lo inhabilita la restauración de sesión de sitios.</small></span>
+        <input type="checkbox" id="clearCookiesOnExit"/>
+      </label>
+      <div class="row">
+        <span><strong>Carpeta de descargas</strong><small id="dl-current">Descargas del sistema</small></span>
+        <div class="btns"><button id="btn-dl-folder">Elegir carpeta…</button></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Contraseñas y extensiones</h2>
+      <label class="row">
+        <span><strong>Ofrecer guardar contraseñas</strong><small>Al enviar un formulario de inicio de sesión. Se cifran con tu cuenta de Windows (DPAPI) y jamás salen del equipo.</small></span>
+        <input type="checkbox" id="pwdAsk"/>
+      </label>
+      <div class="row">
+        <span><strong>Administrar claves guardadas</strong><small>Ver, copiar o eliminar cada clave.</small></span>
+        <div class="btns"><a href="contrasenas.html" style="text-decoration:none"><button>Abrir bóveda…</button></a></div>
+      </div>
+      <div class="row">
+        <span><strong>Userscripts</strong><small>Las extensiones de Galeón: scripts de comunidad (Greasyfork) que se ejecutan donde tú digas. Siempre locales y auditables.</small></span>
+        <div class="btns"><a href="userscripts.html" style="text-decoration:none"><button>Administrar scripts…</button></a></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Acerca de</h2>
+      <div class="row">
+        <span><strong>El pacto</strong><small>Mínimo el 50% de los ingresos de Galeón se destina a retirar y reciclar plástico de ríos y océanos, con informe trimestral público.</small></span>
+      </div>
+      <div class="row">
+        <span><strong>Privacidad</strong><small>Galeón no recoge ni envía dato alguno sobre ti. Política completa en PRIVACIDAD.md del repositorio.</small></span>
+      </div>
+      <div class="row">
+        <span><strong>Filtrado</strong><small>Listas públicas EasyList y EasyPrivacy (CC BY-SA 3.0) + propia, condensadas y embarcadas en la app.</small></span>
+      </div>
+    </section>
+  </div>
+  <script src="ajustes.js"></script>
+</body>
+</html>

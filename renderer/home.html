@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galeón — Nueva pestaña</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+  <div id="wrap">
+    <header class="hero">
+      <svg class="logo" width="76" height="76" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="30" fill="#0A1F3C" stroke="#E8B84B" stroke-width="2.5"/>
+        <path d="M11 49q6-5 11 0t11 0t11 0t11 0" fill="none" stroke="#2EC4B6" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M17 54q5-4 9 0t10 0" fill="none" stroke="#1E8F84" stroke-width="2" stroke-linecap="round" opacity=".65"/>
+        <path d="M32 13v25" stroke="#E8B84B" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M32 10l8 2.6L32 15.2z" fill="#2EC4B6"/>
+        <path d="M34 16q11 5.4 10 15.5L34 33z" fill="#F2E9D8"/>
+        <path d="M30 18q-10 4.6-9 13.6L30 32.6z" fill="#E8B84B"/>
+        <path d="M15.5 37h33l-5.5 8.5q-11 3.2-22 0z" fill="#E8B84B"/>
+        <path d="M18.5 41h27" stroke="#B8860B" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+      </svg>
+      <h1>Galeón</h1>
+      <p class="tagline">Tu tesoro, bien guardado. Cada búsqueda retira plástico de un río.</p>
+    </header>
+
+    <form id="search-form">
+      <input id="search-box" placeholder="Busca sin que nadie te siga…" autofocus autocomplete="off" spellcheck="false"/>
+      <select id="engine" title="Motor de búsqueda">
+        <option value="duckduckgo">DuckDuckGo</option>
+        <option value="startpage">Startpage</option>
+        <option value="mojeek">Mojeek</option>
+      </select>
+    </form>
+
+    <section class="dial" id="dial" hidden>
+      <h2 class="dial-title">Tus marcadores</h2>
+      <div class="dial-grid" id="dial-grid"></div>
+    </section>
+
+    <section class="impact">
+      <div class="stat main">
+        <span class="num" id="bottles">0</span>
+        <span class="label">botellas retiradas de ríos</span>
+      </div>
+      <div class="stat">
+        <span class="num" id="weight">0 g</span>
+        <span class="label">de plástico fuera del agua</span>
+      </div>
+      <div class="stat">
+        <span class="num" id="searches">0</span>
+        <span class="label">búsquedas tuyas</span>
+      </div>
+      <div class="stat">
+        <span class="num" id="blocked">0</span>
+        <span class="label">rastreadores bloqueados</span>
+      </div>
+    </section>
+
+    <section class="project">
+      <div class="project-head">
+        <h2>Proyecto que apoyas ahora</h2>
+        <span class="demo-note">demo — en producción, con recibo y coordenadas verificadas</span>
+      </div>
+      <div class="project-body">
+        <div class="project-art" aria-hidden="true">🌊</div>
+        <div class="project-info">
+          <h3 id="p-name">—</h3>
+          <p class="p-coords" id="p-coords"></p>
+          <p class="p-desc" id="p-desc"></p>
+        </div>
+      </div>
+      <div class="project-picker" id="project-picker"></div>
+      <p class="privacy-line">Tu elección se guarda <strong>solo en tu equipo</strong>. Ni siquiera nosotros sabemos a qué río apoyas.</p>
+    </section>
+
+    <footer>
+      <span>0 telemetría</span><span>·</span>
+      <span>historial 100% local</span><span>·</span>
+      <span>sin perfiles publicitarios</span><span>·</span>
+      <span>cada 10 búsquedas = 1 botella menos en un río</span>
+    </footer>
+  </div>
+  <script src="home.js"></script>
+</body>
+</html>
