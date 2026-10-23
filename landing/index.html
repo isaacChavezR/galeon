@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeón — El navegador que limpía ríos</title>
+  <meta name="description" content="Navegador privado en español. Sin rastreadores, historial 100% local, y cada 10 búsquedas retiran una botella de plástico de un río.">
+  <style>
+    :root {
+      --navy: #0A1F3C; --navy-2: #12294E; --navy-3: #1A3563;
+      --ink: #F2E9D8; --ink-dim: #A9B4C7;
+      --gold: #E8B84B; --teal: #2EC4B6;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: radial-gradient(1200px 700px at 50% -10%, #16345f 0%, var(--navy) 60%), var(--navy);
+      color: var(--ink); line-height: 1.6;
+    }
+    .wrap { width: min(1000px, 92%); margin: 0 auto; }
+
+    /* Hero */
+    header.hero { text-align: center; padding: 70px 0 50px; }
+    .logo-big { filter: drop-shadow(0 8px 24px rgba(232,184,75,.3)); }
+    h1 { font-family: Georgia, serif; font-size: 52px; color: var(--gold); letter-spacing: 2px; margin-top: 12px; }
+    .tagline { font-size: 19px; color: var(--ink); margin-top: 8px; }
+    .sub { color: var(--ink-dim); font-size: 15.5px; max-width: 620px; margin: 12px auto 0; }
+    .cta {
+      display: inline-block; margin-top: 28px; padding: 14px 38px;
+      background: var(--gold); color: #241a00; font-weight: 700; font-size: 17px;
+      border-radius: 30px; text-decoration: none; letter-spacing: .3px;
+      box-shadow: 0 6px 20px rgba(232,184,75,.35);
+    }
+    .cta:hover { background: #f2c766; }
+    .cta-note { display: block; margin-top: 10px; font-size: 12px; color: var(--ink-dim); }
+
+    /* Secciones */
+    section { padding: 46px 0; }
+    h2 { font-size: 26px; margin-bottom: 22px; text-align: center; }
+    h2 .accent { color: var(--teal); }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--navy-2); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px; padding: 22px;
+    }
+    .card .icon { font-size: 30px; }
+    .card h3 { font-size: 16.5px; margin: 10px 0 6px; color: var(--gold); }
+    .card p { font-size: 13.5px; color: var(--ink-dim); }
+
+    /* Pacto */
+    .pact {
+      background: linear-gradient(160deg, rgba(232,184,75,.1), rgba(46,196,182,.08));
+      border: 1px solid rgba(232,184,75,.3);
+      border-radius: 18px; padding: 30px; text-align: center;
+    }
+    .pact .big { font-size: 44px; font-weight: 800; color: var(--gold); }
+    .pact p { max-width: 640px; margin: 8px auto 0; color: var(--ink); font-size: 15px; }
+
+    /* Privacidad */
+    .privacy { background: var(--navy-2); border-radius: 18px; padding: 30px; border: 1px solid rgba(46,196,182,.2); }
+    .privacy ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; margin-top: 14px; }
+    .privacy li { font-size: 14px; color: var(--ink-dim); padding-left: 26px; position: relative; }
+    .privacy li::before { content: "✓"; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,.08); margin-top: 30px;
+      padding: 26px 0 40px; text-align: center; font-size: 12.5px; color: var(--ink-dim);
+    }
+    footer a { color: var(--teal); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <svg class="logo-big" width="110" height="110" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="30" fill="#0A1F3C" stroke="#E8B84B" stroke-width="2.5"/>
+        <path d="M11 49q6-5 11 0t11 0t11 0t11 0" fill="none" stroke="#2EC4B6" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M17 54q5-4 9 0t10 0" fill="none" stroke="#1E8F84" stroke-width="2" stroke-linecap="round" opacity=".65"/>
+        <path d="M32 13v25" stroke="#E8B84B" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M32 10l8 2.6L32 15.2z" fill="#2EC4B6"/>
+        <path d="M34 16q11 5.4 10 15.5L34 33z" fill="#F2E9D8"/>
+        <path d="M30 18q-10 4.6-9 13.6L30 32.6z" fill="#E8B84B"/>
+        <path d="M15.5 37h33l-5.5 8.5q-11 3.2-22 0z" fill="#E8B84B"/>
+        <path d="M18.5 41h27" stroke="#B8860B" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+      </svg>
+      <h1>Galeón</h1>
+      <p class="tagline">Tu tesoro, bien guardado.</p>
+      <p class="sub">El navegador privado en español que retira plástico de los ríos mientras buscas.
+      Sin rastreadores. Sin perfiles. Sin cuentas. Historial 100% local.</p>
+      <!-- Al publicar: reemplazar # por la URL de GitHub Releases -->
+      <a class="cta" id="btn-descarga" href="#">Descargar para Windows</a>
+      <span class="cta-note" id="cta-note">versión beta 0.2 · ~100 MB · también readable el código fuente</span>
+    </header>
+
+    <section id="como">
+      <h2>Cómo <span class="accent">funciona</span></h2>
+      <div class="cards">
+        <div class="card"><div class="icon">🔍</div><h3>1 · Buscas normal</h3>
+          <p>Galeón consulta por ti motores que no te rastrean (DuckDuckGo, Startpage o Mojeek, tú eliges) y bloquea más de 100.000 dominios de rastreadores y publicidad.</p></div>
+        <div class="card"><div class="icon">🍾</div><h3>2 · Cada 10 búsquedas, 1 botella</h3>
+          <p>Las búsquedas generan ingresos. Con ese dinero retiramos plástico de ríos como el Motagua, el Ozama y el Magdalena. El contador de tu navegador lo muestra en vivo.</p></div>
+        <div class="card"><div class="icon">🧾</div><h3>3 · Recibos públicos</h3>
+          <p>Cada trimestre publicamos ingresos, porcentaje enviado y comprobante de cada limpieza, con proyecto, foto y coordenadas. Sin cajas negras.</p></div>
+      </div>
+    </section>
+
+    <section id="pacto">
+      <div class="pact">
+        <div class="big">50%</div>
+        <p><strong>Nuestro pacto:</strong> como mínimo, la mitad de todos los ingresos de Galeón se destina
+        a retirar y reciclar plástico de ríos y océanos. Está escrito aquí, con fecha,
+        antes de ganar el primer peso. Podremos dar más; nunca menos.</p>
+      </div>
+    </section>
+
+    <section id="privacidad">
+      <h2>Privacidad <span class="accent">radical</span></h2>
+      <div class="privacy">
+        <ul>
+          <li>Cero telemetría: Galeón no envía dato alguno sobre ti a ningún servidor. Ni "anónimo".</li>
+          <li>Tu historial, estadísticas y hasta el río que apoyas viven solo en tu equipo.</li>
+          <li>Escudo integrado: bloqueo masivo de rastreadores y publicidad (listas EasyList/EasyPrivacy + propias).</li>
+          <li>Permiso a cámara, ubicación y notificaciones: denegado por defecto, siempre.</li>
+          <li>Sin cuentas, sin login, sin sincronización obligatoria.</li>
+          <li>El buscador por defecto nunca te sigue de sitio en sitio.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="impacto" hidden>
+      <h2>Impacto <span class="accent">de la comunidad</span></h2>
+      <div class="cards">
+        <div class="card"><div class="icon">🍾</div><h3 id="c-botellas">0</h3>
+          <p>botellas retiradas por la comunidad Galeón</p></div>
+        <div class="card"><div class="icon">⚖️</div><h3 id="c-gramos">0 g</h3>
+          <p>de plástico fuera del agua</p></div>
+        <div class="card"><div class="icon">⬇️</div><h3 id="c-descargas">0</h3>
+          <p>descargas (métrica pública de GitHub, sin rastrear usuarios)</p></div>
+      </div>
+      <p class="update-note">Actualizado: <span id="c-fecha">—</span> · cifra agregada de los informes públicos; ninguna búsqueda individual sale de tu equipo.</p>
+    </section>
+
+    <footer>
+      Galeón · hecho con 🌊 en Latinoamérica ·
+      Filtrado basado en <a href="https://easylist.to/" rel="noopener">EasyList y EasyPrivacy</a> (CC BY-SA 3.0) ·
+      <!-- Reemplazar por contacto real al publicar -->
+      hola@galeon.app
+    </footer>
+  </div>
+  <script>
+    // Botón de descarga: cuando exista el repo público, apunta al último release.
+    // Paso único: poner TU_USUARIO/TU_REPO aquí y desplegar.
+    var REPO_GITHUB = null; // ej. 'usuario/galeon'
+    if (REPO_GITHUB) {
+      fetch('https://api.github.com/repos/' + REPO_GITHUB + '/releases/latest')
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (rel) {
+          var btn = document.getElementById('btn-descarga');
+          btn.href = rel.assets[0].browser_download_url;
+          document.getElementById('cta-note').textContent =
+            'versión ' + rel.tag_name + ' · Windows y Android en la página de descargas';
+        })
+        .catch(function () {});
+    }
+
+    // Contador comunitario: números agregados públicos, sin rastrear a nadie
+    fetch('impacto.json')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(d => {
+        document.getElementById('impacto').hidden = false;
+        document.getElementById('c-botellas').textContent = d.botellas.toLocaleString('es');
+        document.getElementById('c-gramos').textContent =
+          d.gramos >= 1000 ? (d.gramos / 1000).toFixed(1) + ' kg' : d.gramos + ' g';
+        document.getElementById('c-descargas').textContent = d.descargas.toLocaleString('es');
+        document.getElementById('c-fecha').textContent = d.actualizado;
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

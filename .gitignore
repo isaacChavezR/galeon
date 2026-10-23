@@ -1,0 +1,25 @@
+# Dependencias y artefactos de build
+node_modules/
+dist/
+capture*.png
+
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+*.apk
+*.keystore
+*.jks
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Capturas de verificación locales
+pantalla*.png
+repro*.png
+verif*.png
+vivo-*.png
+galeon-live*.txt

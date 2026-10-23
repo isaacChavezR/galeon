@@ -1,0 +1,12 @@
+{
+  "actualizado": "2026-10-11",
+  "nota": "Números comunitarios agregados. Se actualizan con cada informe mensual público; ninguna búsqueda individual sale del dispositivo de nadie.",
+  "botellas": 0,
+  "gramos": 0,
+  "descargas": 0,
+  "proyectos": [
+    { "nombre": "Río Motagua", "pais": "Guatemala", "estado": "en conversación" },
+    { "nombre": "Río Ozama", "pais": "República Dominicana", "estado": "en conversación" },
+    { "nombre": "Río Magdalena", "pais": "Colombia", "estado": "en conversación" }
+  ]
+}

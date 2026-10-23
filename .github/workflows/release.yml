@@ -1,0 +1,57 @@
+# Release automático: al etiquetar v* se compilan y publican el instalador
+# de Windows y el APK de Android en GitHub Releases.
+# Uso: git tag v0.2.1 && git push origin v0.2.1
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Inyectar repo de publicación (para firmar updates desde este repo)
+        shell: bash
+        run: |
+          node -e "const p=require('./package.json');p.repository={type:'git',url:'https://github.com/'+process.env.GITHUB_REPOSITORY};require('fs').writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Compilar y publicar instalador
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --win nsis -p always
+      # Nota: cuando se compre el certificado OV, añadir en package.json:
+      #   "win": { "signtoolOptions": { ... } }  o la config de Azure Trusted Signing,
+      # y el flujo firmará automáticamente.
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Compilar APK debug
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+      - name: Renombrar y subir al release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk "Galeon-${TAG}-android-debug.apk"
+          gh release create "$TAG" --draft || true
+          gh release upload "$TAG" "Galeon-${TAG}-android-debug.apk" --clobber
+      # Nota: APK firmado para distribución estable — crear los secrets del repo:
+      #   ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS,
+      #   ANDROID_KEY_PASSWORD  y sustituir assembleDebug por assembleRelease +
+      #   decodificación del keystore. Hasta entonces, el debug APK instala directo.
