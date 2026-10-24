@@ -79,7 +79,8 @@ const SETTINGS_DEFAULTS = {
   downloadsDir: '',      // vacío = carpeta Descargas del sistema
   pwdAsk: true,          // ofrecer guardar contraseñas
   pwdNever: [],          // sitios donde dijiste "nunca"
-  sleepTabs: true        // dormir pestañas inactivas para liberar memoria
+  sleepTabs: true,       // dormir pestañas inactivas para liberar memoria
+  themeCustom: {}        // colores personalizados del tema (vacío = por defecto)
 };
 let settings = { ...SETTINGS_DEFAULTS };
 const siteCounts = {}; // bloqueos de esta sesión atribuidos al sitio visitado
@@ -444,6 +445,16 @@ ipcMain.handle('bookmarks:toggle', (e, { url, title }) => {
   saveJson(bookmarksFile(), bookmarks);
   return true; // añadido
 });
+ipcMain.handle('bookmarks:update', (e, { oldUrl, url, title }) => {
+  const b = bookmarks.find(x => x.url === oldUrl);
+  if (!b || typeof url !== 'string' || !/^https?:\/\//.test(url)) return false;
+  // si la nueva URL ya existe en otro marcador, no duplicar
+  if (url !== oldUrl && bookmarks.some(x => x.url === url)) return false;
+  b.url = url;
+  b.title = (typeof title === 'string' && title.trim()) ? title.trim() : b.title;
+  saveJson(bookmarksFile(), bookmarks);
+  return true;
+});
 
 // --- Ajustes, datos y sesión ---
 const SETTING_KEYS = Object.keys(SETTINGS_DEFAULTS); // lista blanca: nada de claves arbitrarias
@@ -456,6 +467,7 @@ ipcMain.handle('settings:set', (e, patch) => {
   if (!Array.isArray(settings.httpsOff)) settings.httpsOff = [];
   if (!Array.isArray(settings.pwdNever)) settings.pwdNever = [];
   if (typeof settings.zoomByHost !== 'object' || settings.zoomByHost === null) settings.zoomByHost = {};
+  if (typeof settings.themeCustom !== 'object' || settings.themeCustom === null) settings.themeCustom = {};
   saveJson(settingsFile(), settings);
   applyAcceptLang();
   sendAll('settings:changed', settings);

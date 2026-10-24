@@ -151,7 +151,7 @@
   <script>
     // Botón de descarga: cuando exista el repo público, apunta al último release.
     // Paso único: poner TU_USUARIO/TU_REPO aquí y desplegar.
-    var REPO_GITHUB = null; // ej. 'usuario/galeon'
+    var REPO_GITHUB = 'isaacChavezR/galeon';
     if (REPO_GITHUB) {
       fetch('https://api.github.com/repos/' + REPO_GITHUB + '/releases/latest')
         .then(function (r) { return r.ok ? r.json() : Promise.reject(); })

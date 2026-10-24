@@ -77,3 +77,29 @@ input[type="checkbox"]:checked::after { transform: translateX(18px); background:
 .chips button { border-color: rgba(46,196,182,.4); color: var(--teal); }
 
 .stat-line { font-size: 13px; color: var(--gold); text-align: right; }
+
+/* Tema claro opcional */
+body.tema-claro {
+  --navy: #F4F1EA;
+  --navy-2: #FFFFFF;
+  --navy-3: #E9E3D5;
+  --ink: #1E2A3A;
+  --ink-dim: #5A6B80;
+  --gold: #A87908;
+  --teal: #0E8578;
+}
+
+/* Temas: presets y selectores de color */
+.tema-presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.tema-presets button, .tema-acciones button {
+  border: 1px solid rgba(255,255,255,.16); background: var(--navy-3); color: var(--ink);
+  border-radius: 14px; padding: 5px 12px; font-size: 12px; cursor: pointer;
+}
+.tema-presets button.on { border-color: var(--gold); color: var(--gold); background: rgba(232,184,75,.12); }
+.tema-colores { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 10px; }
+.tema-colores label { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-dim); }
+.tema-colores input[type=color] {
+  width: 42px; height: 30px; border: 1px solid rgba(255,255,255,.2);
+  border-radius: 7px; background: transparent; padding: 2px; cursor: pointer;
+}
+.tema-acciones { margin-top: 10px; }

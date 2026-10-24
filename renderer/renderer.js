@@ -879,9 +879,16 @@ window.addEventListener('keydown', (e) => {
   else if (e.altKey && e.key === 'ArrowRight') { activeTab()?.webview?.goForward(); }
 });
 
-/* ---------- Tema (oscuro por defecto, claro opcional) ---------- */
+/* ---------- Tema (presets + colores personalizados, en vivo) ---------- */
 function aplicarTema(s) {
-  document.body.classList.toggle('tema-claro', s && s.theme === 'claro');
+  if (!s) return;
+  document.body.classList.toggle('tema-claro', s.theme === 'claro');
+  const c = s.themeCustom || {};
+  const vars = { '--navy': c.fondo, '--navy-2': c.superficie, '--navy-3': c.superficie2,
+                 '--ink': c.texto, '--ink-dim': c.texto2, '--gold': c.acento, '--teal': c.acento2 };
+  for (const [k, v] of Object.entries(vars)) {
+    if (v) document.body.style.setProperty(k, v); else document.body.style.removeProperty(k);
+  }
 }
 window.galeon.onSettingsChanged(aplicarTema);
 

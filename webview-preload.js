@@ -8,6 +8,7 @@ contextBridge.exposeInMainWorld('galeonPage', {
   getPrefs: () => ipcRenderer.invoke('prefs:get'),
   setPrefs: (patch) => ipcRenderer.invoke('prefs:set', patch),
   listBookmarks: () => ipcRenderer.invoke('bookmarks:list'),
+  bookmarkUpdate: (payload) => ipcRenderer.invoke('bookmarks:update', payload),
 
   // Para la página galeon://ajustes (se carga dentro de una pestaña)
   settingsGet: () => ipcRenderer.invoke('settings:get'),
@@ -48,6 +49,22 @@ contextBridge.exposeInMainWorld('galeonPage', {
   // Favicons locales de primera parte (para el dial de la home)
   getFavicon: (host) => ipcRenderer.invoke('favicon:get', host)
 });
+
+// --- Tema personalizado: pinta las páginas internas con los colores del usuario ---
+function aplicarTemaInterno(settings) {
+  const c = settings && settings.themeCustom;
+  if (!c) return;
+  const vars = { '--navy': c.fondo, '--navy-2': c.superficie, '--navy-3': c.superficie2,
+                 '--ink': c.texto, '--ink-dim': c.texto2, '--gold': c.acento, '--teal': c.acento2 };
+  for (const [k, v] of Object.entries(vars)) {
+    if (typeof v === 'string' && v) document.documentElement.style.setProperty(k, v);
+  }
+  if (settings.theme === 'claro') document.body && document.body.classList.add('tema-claro');
+}
+ipcRenderer.invoke('settings:get').then(({ settings }) => {
+  aplicarTemaInterno(settings);
+  document.addEventListener('DOMContentLoaded', () => aplicarTemaInterno(settings));
+}).catch(() => {});
 
 /* ---------------------------------------------------------------
    Funciones que corren en el mundo aislado (sin exponer a la página):

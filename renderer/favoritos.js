@@ -25,6 +25,9 @@ async function render() {
     const bAbrir = document.createElement('button');
     bAbrir.textContent = 'Abrir aquí';
     bAbrir.addEventListener('click', () => { location.href = b.url; });
+    const bEditar = document.createElement('button');
+    bEditar.textContent = '✏️ Editar';
+    bEditar.addEventListener('click', () => editarFavorito(el, b));
     const bCopiar = document.createElement('button');
     bCopiar.textContent = 'Copiar dirección';
     bCopiar.addEventListener('click', async () => {
@@ -41,10 +44,50 @@ async function render() {
       await g.toggleBookmark({ url: b.url, title: b.title });
       render();
     });
-    btns.append(bAbrir, bCopiar, bDel);
+    btns.append(bAbrir, bEditar, bCopiar, bDel);
     el.append(title, url, btns);
     box.appendChild(el);
   }
+}
+
+// Edición inline: sustituye la fila por un formulario nombre+URL
+function editarFavorito(fila, b) {
+  fila.textContent = '';
+  const inputNombre = document.createElement('input');
+  inputNombre.type = 'text';
+  inputNombre.value = b.title || '';
+  inputNombre.placeholder = 'Nombre';
+  inputNombre.style.cssText = 'width:100%;margin-top:6px';
+  const inputUrl = document.createElement('input');
+  inputUrl.type = 'text';
+  inputUrl.value = b.url;
+  inputUrl.placeholder = 'https://…';
+  inputUrl.style.cssText = 'width:100%;margin-top:6px;font-family:Consolas,monospace';
+  const btns = document.createElement('div');
+  btns.className = 'fav-btns';
+  const bGuardar = document.createElement('button');
+  bGuardar.textContent = 'Guardar';
+  bGuardar.style.borderColor = 'rgba(232,184,75,.5)';
+  bGuardar.style.color = 'var(--gold)';
+  const bCancelar = document.createElement('button');
+  bCancelar.textContent = 'Cancelar';
+  const nota = document.createElement('span');
+  nota.style.cssText = 'font-size:11.5px;color:#e05252;margin-left:8px';
+
+  const guardar = async () => {
+    const nuevaUrl = inputUrl.value.trim();
+    const ok = await g.bookmarkUpdate({ oldUrl: b.url, url: nuevaUrl, title: inputNombre.value });
+    if (ok) render();
+    else nota.textContent = 'URL inválida o ya existe otro marcador con ella';
+  };
+  bGuardar.addEventListener('click', guardar);
+  inputUrl.addEventListener('keydown', (e) => { if (e.key === 'Enter') guardar(); });
+  bCancelar.addEventListener('click', render);
+
+  btns.append(bGuardar, bCancelar, nota);
+  fila.append(inputNombre, inputUrl, btns);
+  inputNombre.focus();
+  inputNombre.select();
 }
 
 render();

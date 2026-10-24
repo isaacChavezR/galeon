@@ -57,14 +57,30 @@
     </section>
 
     <section>
+      <h2>Tema</h2>
+      <div class="row">
+        <span><strong>Presets</strong><small>Un toque y todo el navegador cambia contigo.</small></span>
+        <div class="tema-presets" id="tema-presets">
+          <button data-preset="azul">🌙 Azul noche</button>
+          <button data-preset="papel">📄 Papel claro</button>
+          <button data-preset="oceano">🌊 Océano</button>
+          <button data-preset="bosque">🌲 Bosque</button>
+        </div>
+      </div>
+      <div class="row" style="flex-direction:column;align-items:stretch">
+        <span><strong>Tus colores</strong><small>Personaliza la paleta; se aplica al instante en todo Galeón. Los presets pueden ser tu punto de partida.</small></span>
+        <div class="tema-colores" id="tema-colores"></div>
+        <div class="tema-acciones">
+          <button id="tema-reset">Restablecer colores de fábrica</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
       <h2>Navegación</h2>
       <label class="row">
         <span><strong>Recuperar pestañas al abrir</strong><small>Galeón recuerda tus pestañas (solo en tu equipo) y las reabre.</small></span>
         <input type="checkbox" id="restoreSession"/>
-      </label>
-      <label class="row">
-        <span><strong>Tema claro</strong><small>Galeón es azul noche por defecto; puedes vestirlo de papel.</small></span>
-        <input type="checkbox" id="theme"/>
       </label>
       <label class="row">
         <span><strong>Dormir pestañas inactivas</strong><small>Tras 15 minutos sin usarlas, las pestañas liberan memoria (💤) y se recargan al volver. Como el "ahorrador" de los navegadores grandes.</small></span>
