@@ -455,6 +455,15 @@ ipcMain.handle('bookmarks:update', (e, { oldUrl, url, title }) => {
   saveJson(bookmarksFile(), bookmarks);
   return true;
 });
+ipcMain.handle('bookmarks:add', (e, { url, title }) => {
+  if (typeof url !== 'string') return { ok: false, error: 'URL inválida' };
+  const u = url.trim();
+  if (!/^https?:\/\//.test(u)) return { ok: false, error: 'La dirección debe empezar por https://' };
+  if (bookmarks.some(x => x.url === u)) return { ok: false, error: 'Ya tienes un marcador con esa dirección' };
+  bookmarks.push({ url: u, title: (typeof title === 'string' && title.trim()) ? title.trim() : u, ts: Date.now() });
+  saveJson(bookmarksFile(), bookmarks);
+  return { ok: true };
+});
 
 // --- Ajustes, datos y sesión ---
 const SETTING_KEYS = Object.keys(SETTINGS_DEFAULTS); // lista blanca: nada de claves arbitrarias

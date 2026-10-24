@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('galeonPage', {
   setPrefs: (patch) => ipcRenderer.invoke('prefs:set', patch),
   listBookmarks: () => ipcRenderer.invoke('bookmarks:list'),
   bookmarkUpdate: (payload) => ipcRenderer.invoke('bookmarks:update', payload),
+  bookmarkAdd: (payload) => ipcRenderer.invoke('bookmarks:add', payload),
 
   // Para la página galeon://ajustes (se carga dentro de una pestaña)
   settingsGet: () => ipcRenderer.invoke('settings:get'),
