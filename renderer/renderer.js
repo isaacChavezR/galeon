@@ -143,6 +143,12 @@ async function buildWebview(tab, urlDestino) {
         if (/^https?:\/\//.test(url)) createTab(url, tab.private); // hereda la privacidad de su pestaña
         return { action: 'deny' };
       });
+      // Atajos desde dentro de la página (el foco ya no mata Ctrl+T, Ctrl++, etc.)
+      wv.webContents.on('before-input-event', (event, input) => {
+        if (input.type !== 'keyDown') return;
+        const ev = { key: input.key, ctrlKey: input.control, metaKey: input.meta, altKey: input.alt, shiftKey: input.shift };
+        if (manejarAtajo(ev)) event.preventDefault();
+      });
     }
     if (tab.muted) { try { wv.setAudioMuted(true); } catch {} }
   });
@@ -152,8 +158,9 @@ async function buildWebview(tab, urlDestino) {
     tab.errorUrl = null;
     if (tab.id === activeId) syncToolbar(tab);
     if (!tab.private) window.galeon.addHistory({ url: ev.url, title: tab.title, ts: Date.now() });
-    // Zoom recordado de este sitio
-    const z = zoomByHost[hostOf(ev.url)];
+    // Zoom recordado de este sitio (las páginas internas comparten clave)
+    const claveZ = claveZoom(ev.url);
+    const z = claveZ ? zoomByHost[claveZ] : null;
     try { wv.setZoomFactor(z && z > 0 ? z : 1); } catch {}
   });
   wv.addEventListener('did-navigate-in-page', (ev) => {
@@ -829,6 +836,10 @@ async function renderHistory() {
 }
 
 /* ---------- Zoom (Ctrl+±/0, recordado por sitio) ---------- */
+function claveZoom(url) {
+  const h = hostOf(url);
+  return h || (url && url.startsWith('file:') ? 'galeon-interno' : ''); // páginas internas comparten clave
+}
 async function changeZoom(delta) {
   const tab = activeTab();
   if (!tab) return;
@@ -837,46 +848,58 @@ async function changeZoom(delta) {
     next = delta === 0 ? 1 : Math.min(2, Math.max(0.5, (tab.webview.getZoomFactor() || 1) + delta));
   } catch {}
   try { tab.webview.setZoomFactor(next); } catch {}
-  const host = hostOf(tab.url);
-  if (host) {
-    zoomByHost[host] = next;
+  const clave = claveZoom(tab.url);
+  if (clave) {
+    zoomByHost[clave] = next;
     window.galeon.settingsSet({ zoomByHost }).catch(() => {});
   }
 }
 
-/* ---------- Atajos de teclado ---------- */
+/* ---------- Atajos de teclado ----------
+   Un solo manejador para dos fuentes: la ventana del navegador Y el teclado
+   que llega a las páginas (before-input-event de cada webview). Sin esto,
+   los atajos morían en cuanto el clic entraba en una página. */
+function manejarAtajo(ev) {
+  const ctrl = ev.ctrlKey || ev.metaKey;
+  const k = (ev.key || '').toLowerCase();
+  if (ev.altKey && ev.key === 'ArrowLeft') { activeTab()?.webview?.goBack(); return true; }
+  if (ev.altKey && ev.key === 'ArrowRight') { activeTab()?.webview?.goForward(); return true; }
+  if (!ctrl) {
+    if (ev.key === 'F5') { activeTab()?.webview?.reload(); return true; }
+    if (ev.key === 'F11') { window.galeon.toggleFullscreen(); return true; }
+    if (ev.key === 'Escape' && !findbar.hidden) { closeFindbar(); return true; }
+    return false;
+  }
+  const mapa = () => ({
+    [ctrl && ev.shiftKey && k === 't']: () => { const rc = recentlyClosed.pop(); if (rc) createTab(realFromMarker(rc.m), rc.p); },
+    [ctrl && ev.shiftKey && k === 'n']: () => window.galeon.newWindow(true),
+    [ctrl && ev.shiftKey && k === 'o']: () => createTab(FAVORITOS_URL),
+    [ctrl && ev.shiftKey && k === 'a']: () => (tabsearch.hidden ? abrirBuscadorPestanas() : cerrarBuscadorPestanas()),
+    [ctrl && ev.shiftKey && (ev.key === 'Delete' || ev.key === 'Backspace')]: () => createTab(AJUSTES_URL),
+    [ctrl && ev.shiftKey && k === 's']: () => capturarPagina(),
+    [ctrl && k === 'n']: () => window.galeon.newWindow(false),
+    [ctrl && k === 'h']: () => document.getElementById('btn-history').click(),
+    [ctrl && k === 'j']: () => createTab(DESCARGAS_URL),
+    [ctrl && k === 't']: () => createTab(),
+    [ctrl && k === 'w']: () => { if (activeId) closeTab(activeId); },
+    [ctrl && k === 'l']: () => { urlbar.focus(); urlbar.select(); },
+    [ctrl && k === 'r']: () => activeTab()?.webview?.reload(),
+    [ctrl && k === 'd']: () => btnStar.click(),
+    [ctrl && k === 'f']: () => openFindbar(),
+    [ctrl && (ev.key === '+' || ev.key === '=')]: () => changeZoom(0.1),
+    [ctrl && ev.key === '-']: () => changeZoom(-0.1),
+    [ctrl && ev.key === '0']: () => changeZoom(0),
+    [ctrl && k === 'p']: () => { try { activeTab()?.webview?.print(); } catch {} }
+  });
+  const acciones = mapa();
+  for (const [cond, accion] of Object.entries(acciones)) {
+    if (cond === 'true') { accion(); return true; }
+  }
+  return false;
+}
+
 window.addEventListener('keydown', (e) => {
-  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 't') {
-    e.preventDefault();
-    const rc = recentlyClosed.pop();
-    if (rc) createTab(realFromMarker(rc.m), rc.p);
-  }
-  else if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'n') {
-    e.preventDefault();
-    window.galeon.newWindow(true);
-  }
-  else if (e.ctrlKey && e.key.toLowerCase() === 'n') { e.preventDefault(); window.galeon.newWindow(false); }
-  else if (e.ctrlKey && e.key.toLowerCase() === 'h') { e.preventDefault(); document.getElementById('btn-history').click(); }
-  else if (e.ctrlKey && e.key.toLowerCase() === 'j') { e.preventDefault(); createTab(DESCARGAS_URL); }
-  else if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'o') { e.preventDefault(); createTab(FAVORITOS_URL); }
-  else if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') { e.preventDefault(); tabsearch.hidden ? abrirBuscadorPestanas() : cerrarBuscadorPestanas(); }
-  else if (e.ctrlKey && e.shiftKey && (e.key === 'Delete' || e.key === 'Backspace')) { e.preventDefault(); createTab(AJUSTES_URL); }
-  else if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); capturarPagina(); }
-  else if (e.ctrlKey && e.key.toLowerCase() === 't') { e.preventDefault(); createTab(); }
-  else if (e.ctrlKey && e.key.toLowerCase() === 'w') { e.preventDefault(); if (activeId) closeTab(activeId); }
-  else if (e.ctrlKey && e.key.toLowerCase() === 'l') { e.preventDefault(); urlbar.focus(); urlbar.select(); }
-  else if (e.ctrlKey && e.key.toLowerCase() === 'r') { e.preventDefault(); activeTab()?.webview?.reload(); }
-  else if (e.ctrlKey && e.key.toLowerCase() === 'd') { e.preventDefault(); btnStar.click(); }
-  else if (e.ctrlKey && e.key.toLowerCase() === 'f') { e.preventDefault(); openFindbar(); }
-  else if (e.ctrlKey && (e.key === '+' || e.key === '=')) { e.preventDefault(); changeZoom(0.1); }
-  else if (e.ctrlKey && e.key === '-') { e.preventDefault(); changeZoom(-0.1); }
-  else if (e.ctrlKey && e.key === '0') { e.preventDefault(); changeZoom(0); }
-  else if (e.ctrlKey && e.key.toLowerCase() === 'p') { e.preventDefault(); try { activeTab()?.webview?.print(); } catch {} }
-  else if (e.key === 'F11') { e.preventDefault(); window.galeon.toggleFullscreen(); }
-  else if (e.key === 'F5') { activeTab()?.webview?.reload(); }
-  else if (e.key === 'Escape' && !findbar.hidden) { closeFindbar(); }
-  else if (e.altKey && e.key === 'ArrowLeft') { activeTab()?.webview?.goBack(); }
-  else if (e.altKey && e.key === 'ArrowRight') { activeTab()?.webview?.goForward(); }
+  if (manejarAtajo(e)) e.preventDefault();
 });
 
 /* ---------- Tema (presets + colores personalizados, en vivo) ---------- */
